@@ -5,8 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
-import "./globals.css";
+import { Providers } from "./providers";
 
 // antd UI
 import { AntdRegistry } from '@ant-design/nextjs-registry';
@@ -33,8 +32,16 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        {/* antd UI解决闪烁问题 */}
-        <AntdRegistry>{children}</AntdRegistry>
+        {/* AntdRegistry：antd UI解决闪烁问题 */}
+        <AntdRegistry>
+          {/* 
+          主题样式 
+          在任意子组件中使用 useQuery, useMutation 等 Hook 来进行高效的数据请求和状态管理。 
+          */}
+          <Providers>
+            <main>{children}</main>
+          </Providers>
+        </AntdRegistry>
       </body>
     </html>
   );
