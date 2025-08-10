@@ -16,11 +16,11 @@ import type { BlogPosting, WithContext } from "schema-dts";
 export async function generateMetadata(props: { params: Promise<Params> }) {
   const params = await props.params;
 
-  const { sulg } = params;
+  const { slug } = params;
 
   console.log("params", params);
 
-  const result = await wisp.getPost(sulg);
+  const result = await wisp.getPost(slug);
   if (!result || !result.post) {
     return {
       title: "Blog post not found",
@@ -42,19 +42,19 @@ export async function generateMetadata(props: { params: Promise<Params> }) {
 }
 
 // 定义了一个名为 Params 的接口（Interface）
-// 该接口描述了具有一个 sulg 属性的对象结构
-// sulg 属性的类型是 string（字符串）
+// 该接口描述了具有一个 slug 属性的对象结构
+// slug 属性的类型是 string（字符串）
 interface Params {
-  sulg: string;
+  slug: string;
 }
 
 const Page = async (props: { params: Promise<Params> }) => {
   const params = await props.params;
 
-  const { sulg } = params;
+  const { slug } = params;
 
-  const result = await wisp.getPost(sulg);
-  const { posts } = await wisp.getRelatedPosts({ sulg, limit: 3 });
+  const result = await wisp.getPost(slug);
+  const { posts } = await wisp.getRelatedPosts({ slug, limit: 3 });
 
   if (!result || !result.post) {
     return notFound();
@@ -87,7 +87,7 @@ const Page = async (props: { params: Promise<Params> }) => {
         <div className="max-w-prose mx-auto text-xl">
           <BlogPostContent post={result.post} />
           <RelatedPosts posts={posts} />
-          <CommentSection sulg={sulg} />
+          <CommentSection slug={slug} />
         </div>
         <Footer />
       </div>
