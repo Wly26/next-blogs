@@ -19,6 +19,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-toast": "^1.2.14",
     "@tanstack/react-query": "^5.83.0",
+    "@vercel/og": "^0.8.5",
     "@wisp-cms/client": "^0.0.23",
     "antd": "^5.26.4",
     "axios": "^1.11.0",
