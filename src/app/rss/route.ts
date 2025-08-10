@@ -31,7 +31,8 @@ export async function GET() {
     return {
       title: post.title,
       description: post.description || "",
-      url: urlJoin(baseUrl, `/blog/${post.slug}`),
+      // url: urlJoin(baseUrl, `/blog/${post.slug}`),
+      url: urlJoin(baseUrl, "/rss"),
       date: post.publishedAt || new Date(),
     };
   });

@@ -21,7 +21,7 @@ export const RelatedPosts: FunctionComponent<{
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {posts.slice(0, 3).map((post) => (
           <div className=" bg-muted overflow-hidden rounded-lg" key={post.id}>
-            <Link href={`/blog/${post.slug}`}>
+            {/* <Link href={`/blog/${post.slug}`}> */}
               <AspectRatio ratio={16 / 9} className="w-full">
                 <Image
                   src={post.image || "/images/placeholder.png"}
@@ -30,13 +30,13 @@ export const RelatedPosts: FunctionComponent<{
                   className="h -full min-h-full min-w-full object-cover object-center"
                 />
               </AspectRatio>
-            </Link>
+            {/* </Link> */}
             <div className="prose prose-sm dark:prose-invert p-4">
               <h3 className="line-clamp-2">{post.title}</h3>
               <p className="line-clamp-3">{post.description}</p>
-              <Link href={`/blog/${post.slug}`}>
+              {/* <Link href={`/blog/${post.slug}`}> */}
                 <strong>Read Full Story</strong>
-              </Link>
+              {/* </Link> */}
             </div>
           </div>
         ))}
