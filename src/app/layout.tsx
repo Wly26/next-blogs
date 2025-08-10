@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { config } from "@/config";
+import { signOgImageUrl } from "@/lib/og-image";
 
 // 使用工具类 cn
 import { cn } from "@/lib/utils";
@@ -14,8 +15,21 @@ const fontSans = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 
 export const metadata: Metadata = {
-  title: "练习案例-博客系统​",
-  description: "练习1",
+  title: {
+    absolute: config.blog.metadata.title.absolute,
+    default: config.blog.metadata.title.default,
+    template: config.blog.metadata.title.template,
+  },
+  description: config.blog.metadata.description,
+  openGraph: {
+    title: config.blog.metadata.title.default,
+    description: config.blog.metadata.description,
+    images: [
+      signOgImageUrl({
+        title: config.blog.name,
+      }),
+    ],
+  },
 };
 
 

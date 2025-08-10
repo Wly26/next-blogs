@@ -4,9 +4,13 @@
 // 管理 Toast 的状态（如显示、隐藏、移除）
 // 提供开发者友好的 API（如 toast({ title, description })）
 
+// 核心功能：
+// toast 函数：创建新的 Toast 消息，返回包含 id、dismiss 和 update 方法的对象
+// useToast Hook：提供给组件使用的自定义 Hook，返回当前 Toast 状态和操作方法
+// reducer：管理 Toast 状态的 reducer 函数，处理添加、更新、关闭和删除操作
+
 "use client"
 
-// Inspired by react-hot-toast library
 import * as React from "react"
 
 import type {
@@ -17,12 +21,18 @@ import type {
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
 
+// 扩展 ToastProps 接口
 type ToasterToast = ToastProps & {
-  id: string
-  title?: React.ReactNode
-  description?: React.ReactNode
-  action?: ToastActionElement
-}
+  id: string; // 为每个 Toast 消息添加了必需的 id 字段，用于唯一标识
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  action?: ToastActionElement;
+};
+
+// as const 的作用：
+// 将对象及其属性标记为不可变的字面量类型
+// 使得 TypeScript 能够推断出更精确的类型（"ADD_TOAST" 而不是 string）
+// 提供更好的类型检查和自动补全支持
 
 const actionTypes = {
   ADD_TOAST: "ADD_TOAST",
@@ -34,6 +44,9 @@ const actionTypes = {
 let count = 0
 
 function genId() {
+  // count + 1: 将当前计数器值加1
+  // Number.MAX_SAFE_INTEGER: JavaScript 中最大的安全整数，值为 9007199254740991 (2^53 - 1)
+  // % (取模运算): 计算除法的余数
   count = (count + 1) % Number.MAX_SAFE_INTEGER
   return count.toString()
 }
@@ -58,10 +71,19 @@ type Action =
       toastId?: ToasterToast["id"]
     }
 
+// State 接口定义了整个 Toast 系统的状态结构
+// 包含一个 toasts 数组属性，用于存储所有当前的 Toast 消息
 interface State {
   toasts: ToasterToast[]
 }
 
+// toastTimeouts 是一个 Map 数据结构，用于存储每个 Toast 的自动移除定时器
+// 键（key）是 Toast 的 id 字符串
+// 值（value）是 setTimeout 的返回类型
+
+// ReturnType<typeof setTimeout> 表示 setTimeout 函数的返回值类型
+// 在浏览器环境中，这是 timeout ID（数字类型）
+// 使用 ReturnType 可以确保类型安全和平台兼容性
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
 const addToRemoveQueue = (toastId: string) => {
@@ -98,9 +120,6 @@ export const reducer = (state: State, action: Action): State => {
 
     case "DISMISS_TOAST": {
       const { toastId } = action
-
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
       if (toastId) {
         addToRemoveQueue(toastId)
       } else {
@@ -148,6 +167,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">
 
+//它是 Toast 系统的核心 API，用于创建和管理 Toast 消息
 function toast({ ...props }: Toast) {
   const id = genId()
 
@@ -176,6 +196,10 @@ function toast({ ...props }: Toast) {
     update,
   }
 }
+
+// 用于在组件中访问和管理 Toast 通知系统
+// toast 函数：创建新的 Toast 消息
+// dismiss 函数：关闭特定或所有 Toast 消息
 
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)

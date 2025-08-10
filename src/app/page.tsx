@@ -1,10 +1,23 @@
-// 一个内置的图片组件，可用来优化图片加载，并支持懒加载。
-import Image from "next/image";
+import { BlogPostsPreview } from "@/components/BlogPostPreview";
+import { BlogPostsPagination } from "@/components/BlogPostsPagination";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { wisp } from "@/lib/wisp";
 
-export default function Home() {
+const Page = async (props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
+  const searchParams = await props.searchParams;
+  const page = searchParams.page ? parseInt(searchParams.page as string) : 1;
+  const result = await wisp.getPosts({ limit: 6, page });
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-123
+    <div className="container mx-auto px-5 mb-10">
+      <Header />
+      <BlogPostsPreview posts={result.posts} />
+      <BlogPostsPagination pagination={result.pagination} />
+      <Footer />
     </div>
   );
-}
+};
+
+export default Page;

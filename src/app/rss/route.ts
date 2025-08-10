@@ -10,6 +10,7 @@ export const revalidate = 3600;
 // 用于构建带有自定义头信息的响应。
 import { NextResponse } from "next/server";
 // npm install rss
+// npm install @types/rss --save-dev
 // rss 是一个用于 生成 RSS 2.0 feed 的 Node.js 库。
 // 在你的代码中，它被用来构建博客文章的 RSS 订阅源，以便用户或工具可以订阅内容更新。
 // rss：用来生成 RSS 2.0 订阅源。

@@ -1,15 +1,20 @@
-// 生成动态的 OG (Open Graph) 图片
+// 生成动态的 OG (Open Graph) 图片：
+// 主要目的：创建带签名的URL来生成动态OG图片，防止他人滥用图片生成服务
+// 核心函数功能：
+// signOgImageParams：使用HMAC-SHA256算法对OG图片参数进行签名，创建安全签名
+// verifyOgImageSignature：验证OG图片请求的真实性
+// verifyOgImageSignature：验证OG图片请求的真实性
+
 import { config } from "@/config";
 import { createHmac } from "crypto";
 import urlJoin from "url-join";
 
-// Secret is used for signing and verifying the url to prevent misuse of your service to generate images for others
 const secret = config.ogImageSecret;
 
 export interface OpenGraphImageParams {
-  title: string;
-  label?: string;
-  brand?: string;
+  title: string; // OG图片的主标题
+  label?: string; // 可选标签（如分类或标签）
+  brand?: string; // 可选品牌名称
 }
 
 export const signOgImageParams = ({
